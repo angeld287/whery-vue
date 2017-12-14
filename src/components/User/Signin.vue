@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row v-if="error">
       <v-flex xs12 sm6 offset-sm3>
-        <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+        <app-alert @dismissed="onDismissed" :text="error"></app-alert>
       </v-flex>
     </v-layout>
     <v-layout row>
@@ -14,11 +14,10 @@
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
-                      name="email"
-                      label="Mail"
-                      id="email"
-                      v-model="email"
-                      type="email"
+                      name="username"
+                      label="Username"
+                      id="username"
+                      v-model="username"
                       required></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -35,7 +34,7 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-btn type="submit" :disabled="loading" :loading="loading">
+                    <v-btn type="submit" :disabled="false" :loading="false">
                       Sign in
                        <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>
@@ -53,37 +52,53 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import axios from 'axios'
+  import VueAxios from 'vue-axios'
+  
+  Vue.use(VueAxios, axios)
+
   export default {
     data () {
       return {
-        email: '',
+        username: '',
         password: ''
       }
     },
     computed: {
       user () {
-        return this.$store.getters.user
+       // return this.$store.getters.user
       },
       error () {
-        return this.$store.getters.error
+       // return this.$store.getters.error
       },
       loading () {
-        return this.$store.getters.loading
+        //return this.$store.getters.loading
       }
     },
     watch: {
       user (value) {
         if (value !== null && value !== undefined) {
-          this.$router.push('/')
+         // this.$router.push('/')
         }
       }
     },
     methods: {
       onSignin () {
-        this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+        Vue.axios.post(`http://localhost:8080/api/users/auth/login`, {
+            userName: this.username, 
+            password: this.password
+        }).then((response) =>{
+          console.log(response.status)
+        }).catch(function (error){
+          if(error.response){
+            console.log(error.response)
+          }
+        })
+        //this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
       },
       onDismissed () {
-        this.$store.dispatch('clearError')
+        //this.$store.dispatch('clearError')
       }
     }
   }
