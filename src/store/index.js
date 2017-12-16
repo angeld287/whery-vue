@@ -1,8 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as firebase from 'firebase'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
+Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+
+var urlusers = {
+  url: "http://52.15.105.205/api/users/",
+  auth: "http://52.15.105.205/api/users/auth/login"
+};//http://52.15.105.205/api/users/aangeles28
 
 export const store = new Vuex.Store({
   state: {
@@ -50,7 +58,7 @@ export const store = new Vuex.Store({
   },
   actions: {
     loadMeetups ({commit}) {
-      commit('setLoading', true)
+      //commit('setLoading', true)
       firebase.database().ref('meetups').once('value')
         .then((data) => {
           const meetups = []
@@ -119,33 +127,36 @@ export const store = new Vuex.Store({
           }
         )
     },
+
+    //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     signUserIn ({commit}, payload) {
       commit('setLoading', true)
       commit('clearError')
-      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            commit('setLoading', false)
-            const newUser = {
-              id: user.uid,
-              registeredMeetups: []
-            }
-            commit('setUser', newUser)
+      Vue.axios.post(urlusers.auth, {
+          userName: payload.username, 
+          password: payload.password
+      }).then(
+        (response) =>{
+          commit('setLoading', false)
+          const newUser = {
+            key: response.data.key,
+            token: response.data.token
           }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
+          commit('setUser', newUser)
+        }
+      ).catch(
+        (error) =>{
+          commit('setLoading', false)
+          commit('setError', error.response.data.message)
+          console.log(error.response.data.message)
+        }
+      )
     },
+    //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     autoSignIn ({commit}, payload) {
       commit('setUser', {id: payload.uid, registeredMeetups: []})
     },
     logout ({commit}) {
-      firebase.auth().signOut()
       commit('setUser', null)
     },
     clearError ({commit}) {

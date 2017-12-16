@@ -1,3 +1,4 @@
 build/*.js
 config/*.js
 src/components/user/*.vue
+src/store/*.js

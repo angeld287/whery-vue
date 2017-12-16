@@ -34,7 +34,7 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-btn type="submit" :disabled="false" :loading="false">
+                    <v-btn type="submit" :disabled="loading" :loading="loading">
                       Sign in
                        <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>
@@ -67,38 +67,28 @@
     },
     computed: {
       user () {
-       // return this.$store.getters.user
+       return this.$store.getters.user
       },
       error () {
-       // return this.$store.getters.error
+       return this.$store.getters.error
       },
       loading () {
-        //return this.$store.getters.loading
+        return this.$store.getters.loading
       }
     },
     watch: {
       user (value) {
         if (value !== null && value !== undefined) {
-         // this.$router.push('/')
+         this.$router.push('/Profile')
         }
       }
     },
     methods: {
-      onSignin () {
-        Vue.axios.post(`http://localhost:8080/api/users/auth/login`, {
-            userName: this.username, 
-            password: this.password
-        }).then((response) =>{
-          console.log(response.status)
-        }).catch(function (error){
-          if(error.response){
-            console.log(error.response)
-          }
-        })
-        //this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
+      onSignin(){
+        this.$store.dispatch('signUserIn', {username: this.username, password: this.password})
       },
-      onDismissed () {
-        //this.$store.dispatch('clearError')
+      onDismissed(){
+        this.$store.dispatch('clearError')
       }
     }
   }
