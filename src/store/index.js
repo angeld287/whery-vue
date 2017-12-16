@@ -3,14 +3,16 @@ import Vuex from 'vuex'
 import * as firebase from 'firebase'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueLocalStorage from 'vue-localstorage'
 
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
+Vue.use(VueLocalStorage)
 
 var urlusers = {
   url: "http://52.15.105.205/api/users/",
   auth: "http://52.15.105.205/api/users/auth/login"
-};//http://52.15.105.205/api/users/aangeles28
+};
 
 export const store = new Vuex.Store({
   state: {
@@ -32,7 +34,11 @@ export const store = new Vuex.Store({
         description: 'It\'s Paris!'
       }
     ],
-    user: null,
+    user: {
+      key: Vue.localStorage.get('key'),
+      token: Vue.localStorage.get('token'),
+      username: Vue.localStorage.get('username')
+    },
     loading: false,
     error: null
   },
@@ -44,7 +50,8 @@ export const store = new Vuex.Store({
       state.loadedMeetups.push(payload)
     },
     setUser (state, payload) {
-      state.user = payload
+      state.user.key = payload.key
+      state.user.token = payload.token
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -112,11 +119,11 @@ export const store = new Vuex.Store({
         .then(
           user => {
             commit('setLoading', false)
-            const newUser = {
+            const userdata = {
               id: user.uid,
               registeredMeetups: []
             }
-            commit('setUser', newUser)
+            commit('setUser', userdata)
           }
         )
         .catch(
@@ -138,11 +145,15 @@ export const store = new Vuex.Store({
       }).then(
         (response) =>{
           commit('setLoading', false)
-          const newUser = {
-            key: response.data.key,
-            token: response.data.token
+          Vue.localStorage.set('key', response.data.token)
+          Vue.localStorage.set('token', response.data.token)
+          Vue.localStorage.set('username', response.data.token)
+          const userdata = {
+            key: Vue.localStorage.get('key'),
+            token: Vue.localStorage.get('token'),
+            username: Vue.localStorage.get('username')
           }
-          commit('setUser', newUser)
+          commit('setUser', userdata)
         }
       ).catch(
         (error) =>{
@@ -157,7 +168,16 @@ export const store = new Vuex.Store({
       commit('setUser', {id: payload.uid, registeredMeetups: []})
     },
     logout ({commit}) {
-      commit('setUser', null)
+      Vue.localStorage.remove('key')
+      Vue.localStorage.remove('token')
+      Vue.localStorage.remove('username')
+
+      const userdata = {
+        key: Vue.localStorage.get('key'),
+        token: Vue.localStorage.get('token'),
+        username: Vue.localStorage.get('username')
+      }
+      commit('setUser', userdata)
     },
     clearError ({commit}) {
       commit('clearError')
@@ -180,7 +200,7 @@ export const store = new Vuex.Store({
       }
     },
     user (state) {
-      return state.user
+      return state.user.token
     },
     loading (state) {
       return state.loading

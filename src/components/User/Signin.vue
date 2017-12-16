@@ -57,7 +57,6 @@
   import VueAxios from 'vue-axios'
   
   Vue.use(VueAxios, axios)
-
   export default {
     data () {
       return {
