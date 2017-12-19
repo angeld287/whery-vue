@@ -14,6 +14,46 @@
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
+                      name="firstName"
+                      label="First Name"
+                      id="firstName"
+                      v-model="firstName"
+                      required></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs12>
+                    <v-text-field
+                      name="lastName"
+                      label="Last Name"
+                      id="lastName"
+                      v-model="lastName"
+                      required></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs12>
+                    <v-text-field
+                      name="userName"
+                      label="User Name"
+                      id="userName"
+                      v-model="userName"
+                      required></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs12>
+                    <v-text-field
+                      name="image"
+                      label="Image"
+                      id="image"
+                      v-model="image"
+                      required></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
+                  <v-flex xs12>
+                    <v-text-field
                       name="email"
                       label="Mail"
                       id="email"
@@ -24,13 +64,14 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-text-field
+                    <password 
                       name="password"
                       label="Password"
                       id="password"
                       v-model="password"
                       type="password"
-                      required></v-text-field>
+                      required>
+                    </password>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
@@ -46,7 +87,7 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-btn type="submit" :disabled="false" :loading="false">
+                    <v-btn type="submit" :disabled="loading" :loading="loading">
                       Sign up
                        <span slot="loader" class="custom-loader">
                         <v-icon light>cached</v-icon>
@@ -64,9 +105,16 @@
 </template>
 
 <script>
+  import Password from 'vue-password-strength-meter'
+
   export default {
+    components: { Password },
     data () {
       return {
+        firstName: '',
+        lastName: '',
+        userName: '',
+        image: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -95,7 +143,15 @@
     },
     methods: {
       onSignup () {
-        this.$store.dispatch('signUserUp', {email: this.email, password: this.password})
+        this.$store.dispatch('signUserUp', 
+        {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          userName: this.userName,
+          image: this.image,
+          email: this.email,
+          password: this.password,
+        })
       },
       onDismissed () {
         this.$store.dispatch('clearError')

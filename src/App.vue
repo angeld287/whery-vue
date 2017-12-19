@@ -83,6 +83,7 @@
     },
     methods: {
       onLogout () {
+        this.$store.dispatch('clearError')
         this.$store.dispatch('logout')
         this.$router.push('/')
       }

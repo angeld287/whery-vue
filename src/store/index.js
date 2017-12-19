@@ -112,27 +112,42 @@ export const store = new Vuex.Store({
         })
       // Reach out to firebase and store it
     },
+    
+    //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    
+
     signUserUp ({commit}, payload) {
       commit('setLoading', true)
       commit('clearError')
-      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(
-          user => {
-            commit('setLoading', false)
-            const userdata = {
-              id: user.uid,
-              registeredMeetups: []
-            }
-            commit('setUser', userdata)
+
+      Vue.axios.post(urlusers.url, {
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          userName: payload.userName,
+          image: payload.image,
+          email: payload.email,
+          password: payload.password
+      }).then(
+        (response) =>{
+          console.log(response.data)
+          /* commit('setLoading', false)
+          Vue.localStorage.set('key', response.data.token)
+          Vue.localStorage.set('token', response.data.token)
+          Vue.localStorage.set('username', response.data.token)
+          const userdata = {
+            key: Vue.localStorage.get('key'),
+            token: Vue.localStorage.get('token'),
+            username: Vue.localStorage.get('username')
           }
-        )
-        .catch(
-          error => {
-            commit('setLoading', false)
-            commit('setError', error)
-            console.log(error)
-          }
-        )
+          commit('setUser', userdata) */
+        }
+      ).catch(
+        (error) =>{
+          commit('setLoading', false)
+          commit('setError', error.response)
+          console.log(error.response)
+        }
+      )
     },
 
     //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
@@ -163,7 +178,6 @@ export const store = new Vuex.Store({
         }
       )
     },
-    //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     autoSignIn ({commit}, payload) {
       commit('setUser', {id: payload.uid, registeredMeetups: []})
     },
