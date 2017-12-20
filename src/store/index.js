@@ -50,6 +50,9 @@ export const store = new Vuex.Store({
     error: null,
     userSearch: {
       image: null
+    },
+    userProfile:{
+      image: null
     }
   },
   mutations: {
@@ -62,6 +65,7 @@ export const store = new Vuex.Store({
     setUser (state, payload) {
       state.user.key = payload.key
       state.user.token = payload.token
+      state.user.username = payload.username
     },
     setLoading (state, payload) {
       state.loading = payload
@@ -71,6 +75,9 @@ export const store = new Vuex.Store({
     },
     setUserSearch (state, payload) {
       state.userSearch = payload
+    },
+    setUserProfile (state, payload) {
+      state.userProfile = payload
     },
     clearError (state) {
       state.error = null
@@ -125,7 +132,28 @@ export const store = new Vuex.Store({
         })
       // Reach out to firebase and store it
     },
-    
+    updateMeetupData ({commit}, payload) {
+      commit('setLoading', true)
+      const updateObj = {}
+      if (payload.title) {
+        updateObj.title = payload.title
+      }
+      if (payload.description) {
+        updateObj.description = payload.description
+      }
+      if (payload.date) {
+        updateObj.date = payload.date
+      }
+      firebase.database().ref('meetups').child(payload.id).update(updateObj)
+        .then(() => {
+          commit('setLoading', false)
+          commit('updateMeetup', payload)
+        })
+        .catch(error => {
+          console.log(error)
+          commit('setLoading', false)
+        })
+    },
     //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     
 
@@ -144,9 +172,9 @@ export const store = new Vuex.Store({
         (response) =>{
           console.log(response.data)
           /* commit('setLoading', false)
-          Vue.localStorage.set('key', response.data.token)
+          Vue.localStorage.set('key', response.data.key)
           Vue.localStorage.set('token', response.data.token)
-          Vue.localStorage.set('username', response.data.token)
+          Vue.localStorage.set('username', response.data.username)
           const userdata = {
             key: Vue.localStorage.get('key'),
             token: Vue.localStorage.get('token'),
@@ -173,9 +201,9 @@ export const store = new Vuex.Store({
       }).then(
         (response) =>{
           commit('setLoading', false)
-          Vue.localStorage.set('key', response.data.token)
+          Vue.localStorage.set('key', response.data.key)
           Vue.localStorage.set('token', response.data.token)
-          Vue.localStorage.set('username', response.data.token)
+          Vue.localStorage.set('username', payload.username)
           const userdata = {
             key: Vue.localStorage.get('key'),
             token: Vue.localStorage.get('token'),
@@ -208,6 +236,23 @@ export const store = new Vuex.Store({
           console.log(error)
         }
       )
+    },
+    userProfile({commit}){
+      
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          api.get('http://52.15.105.205/api/users/'+ this.state.user.username).then((response) => {
+              commit('setUserProfile', response.data) 
+              resolve(response.data)
+          }).catch(
+            (error) =>{
+              commit('setError', error)
+              reject(error)
+              console.log(error)
+            }
+          )
+        }, 10)
+      })
     },
     logout ({commit}) {
       Vue.localStorage.remove('key')
@@ -242,7 +287,10 @@ export const store = new Vuex.Store({
       }
     },
     user (state) {
-      return state.user.token
+      return state.user
+    },
+    userProfile (state) {
+      return state.userProfile
     },
     loading (state) {
       return state.loading

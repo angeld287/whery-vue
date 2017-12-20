@@ -68,6 +68,9 @@
       user () {
        return this.$store.getters.user
       },
+      token () {
+       return this.$store.getters.user.token
+      },
       error () {
        return this.$store.getters.error
       },
@@ -76,7 +79,7 @@
       }
     },
     watch: {
-      user (value) {
+      token (value) {
         if (value !== null && value !== undefined) {
          this.$router.push('/Profile')
         }

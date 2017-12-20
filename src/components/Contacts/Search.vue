@@ -45,7 +45,7 @@
                         </v-flex>
                         <v-flex xs7>
                           <div class="headline">Supermodel</div>
-                          <form @submit.prevent="onSearch">
+                          <form @submit.prevent="onAddContact">
                             <v-layout row>
                               <v-flex xs12>
                                 <v-btn type="submit" :disabled="loading" :loading="loading">
@@ -111,6 +111,9 @@
     methods: {
       onSearch(){
         this.$store.dispatch('searcUser', {username: this.username})
+      },
+      onAddContact(){
+        console.log("asdas")
       },
       onDismissed(){
         this.$store.dispatch('clearError')

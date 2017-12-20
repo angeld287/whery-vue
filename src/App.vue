@@ -79,7 +79,7 @@
         return menuItems
       },
       userIsAuthenticated () {
-        return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+        return this.$store.getters.user.token !== null && this.$store.getters.user.token !== undefined
       }
     },
     methods: {
