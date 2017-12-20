@@ -1,4 +1,5 @@
 build/*.js
 config/*.js
 src/components/user/*.vue
+src/components/Contacts/*.vue
 src/store/*.js

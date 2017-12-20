@@ -9,8 +9,8 @@
                 <v-icon>chevron_left</v-icon>
               </v-btn>
               <v-spacer></v-spacer>
-              <v-btn dark icon class="mr-3" flat :to="'/editprofile/'">  <!-- + User.key -->
-                <v-icon left light>edit</v-icon>
+              <v-btn dark icon class="mr-3">
+                <v-icon>edit</v-icon>
               </v-btn>
               <v-btn dark icon>
                 <v-icon>more_vert</v-icon>
