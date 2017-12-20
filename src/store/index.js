@@ -14,6 +14,13 @@ var urlusers = {
   auth: "http://52.15.105.205/api/users/auth/login"
 };
 
+const api = Vue.axios.create({
+  headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer '+ Vue.localStorage.get('token')
+  }
+})
+
 export const store = new Vuex.Store({
   state: {
     loadedMeetups: [
@@ -40,7 +47,10 @@ export const store = new Vuex.Store({
       username: Vue.localStorage.get('username')
     },
     loading: false,
-    error: null
+    error: null,
+    userSearch: {
+      image: null
+    }
   },
   mutations: {
     setLoadedMeetups (state, payload) {
@@ -58,6 +68,9 @@ export const store = new Vuex.Store({
     },
     setError (state, payload) {
       state.error = payload
+    },
+    setUserSearch (state, payload) {
+      state.userSearch = payload
     },
     clearError (state) {
       state.error = null
@@ -167,6 +180,21 @@ export const store = new Vuex.Store({
     autoSignIn ({commit}, payload) {
       commit('setUser', {id: payload.uid, registeredMeetups: []})
     },
+
+    searcUser({commit}, payload){
+      commit('setLoading', true)
+      api.get('http://52.15.105.205/api/users/'+ payload.username).then((response) => {
+          commit('setUserSearch', response.data) 
+          console.log(this.state.userSearch)
+          commit('setLoading', false)
+      }).catch(
+        (error) =>{
+          commit('setLoading', false)
+          commit('setError', error)
+          console.log(error)
+        }
+      )
+    },
     logout ({commit}) {
       Vue.localStorage.remove('key')
       Vue.localStorage.remove('token')
@@ -207,6 +235,9 @@ export const store = new Vuex.Store({
     },
     error (state) {
       return state.error
+    },
+    searchedUser (state) {
+      return state.userSearch
     }
   }
 })

@@ -10,7 +10,7 @@
         <v-card>
           <v-card-text>
             <v-container>
-              <form @submit.prevent="onSignin">
+              <form @submit.prevent="onSearch">
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
@@ -40,12 +40,27 @@
                         <v-flex xs7>
                           <div>
                             <div class="headline">Supermodel</div>
-                            <div>Foster the People</div>
+                            <div><h6>{{user.name}}</h6></div>
                           </div>
+                        </v-flex>
+                        <v-flex xs7>
+                          <div class="headline">Supermodel</div>
+                          <form @submit.prevent="onSearch">
+                            <v-layout row>
+                              <v-flex xs12>
+                                <v-btn type="submit" :disabled="loading" :loading="loading">
+                                  Add Contact
+                                  <span slot="loader" class="custom-loader">
+                                    <v-icon light>cached</v-icon>
+                                  </span>
+                                </v-btn>
+                              </v-flex>
+                            </v-layout>
+                          </form>
                         </v-flex>
                         <v-flex xs5>
                           <v-card-media
-                            :src="User.image"
+                            :src="user.image"
                             height="125px"
                             contain
                           ></v-card-media>
@@ -72,13 +87,12 @@
   export default {
     data () {
       return {
-        User: [],
         username: ''
       }
     },
     computed: {
       user () {
-       return this.$store.getters.user
+       return this.$store.getters.searchedUser
       },
       error () {
        return this.$store.getters.error
@@ -90,22 +104,13 @@
     watch: {
       user (value) {
         if (value !== null && value !== undefined) {
-         this.$router.push('/Profile')
+         //this.$router.push('/Profile')
         }
       }
     },
     methods: {
-      onSignin(){
-       const api = Vue.axios.create({
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+ this.$store.state.user.token
-            }
-        })
-        api.get('http://52.15.105.205/api/users/'+ this.username).then((response) => {
-            this.User = response.data
-            console.log(this.User)
-        })
+      onSearch(){
+        this.$store.dispatch('searcUser', {username: this.username})
       },
       onDismissed(){
         this.$store.dispatch('clearError')
