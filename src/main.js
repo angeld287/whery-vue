@@ -6,12 +6,14 @@ import router from './router'
 import { store } from './store'
 import DateFilter from './filters/date'
 import AlertCmp from './components/Shared/Alert.vue'
+import EditProfile from './components/User/EditProfile/EditProfile.vue'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
 
 Vue.filter('date', DateFilter)
 Vue.component('app-alert', AlertCmp)
+Vue.component('app-edit-profile', EditProfile)
 
 /* eslint-disable no-new */
 new Vue({

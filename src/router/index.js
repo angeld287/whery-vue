@@ -10,6 +10,7 @@ import Meetup from '@/components/Meetup/Meetup'
 import AuthGuardin from './auth-guard-in'
 import AuthGuardout from './auth-guard-out'
 import SearchContacts from '@/components/Contacts/Search'
+import ContactsList from '@/components/Contacts/ContactsList'
 
 Vue.use(Router)
 
@@ -59,6 +60,12 @@ export default new Router({
       path: '/searchcontacts',
       name: 'SearchContacts',
       component: SearchContacts,
+      beforeEnter: AuthGuardin
+    },
+    {
+      path: '/contactlist',
+      name: 'ContactsList',
+      component: ContactsList,
       beforeEnter: AuthGuardin
     }
   ],

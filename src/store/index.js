@@ -42,7 +42,7 @@ export const store = new Vuex.Store({
       }
     ],
     user: {
-      key: Vue.localStorage.get('key'),
+      key: Vue.localStorage.get('thekey'),
       token: Vue.localStorage.get('token'),
       username: Vue.localStorage.get('username')
     },
@@ -191,24 +191,55 @@ export const store = new Vuex.Store({
       )
     },
 
+    //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+    updateUser ({commit}, payload) {
+      commit('setLoading', true)
+      commit('clearError')
+      console.log(Vue.localStorage.get('thekey'))
+
+      api.put(urlusers.url+Vue.localStorage.get('thekey'), {
+          //firstName: payload.firstName,
+          //lastName: payload.lastName,
+          //userName: payload.userName,
+          image: payload.image,
+          //email: payload.email,
+          //password: payload.password
+      }).then(
+        (response) =>{
+          console.log(response.data)
+        }
+      ).catch(
+        (error) =>{
+          commit('setLoading', false)
+          commit('setError', error.response)
+          console.log(error.response)
+        }
+      )
+    },
+
     //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    
     signUserIn ({commit}, payload) {
       commit('setLoading', true)
       commit('clearError')
-      Vue.axios.post(urlusers.auth, {
+      api.post(urlusers.auth, {
           userName: payload.username, 
           password: payload.password
       }).then(
         (response) =>{
           commit('setLoading', false)
-          Vue.localStorage.set('key', response.data.key)
+          console.log(response.data.key)
+          console.log(response.data.token)
+          Vue.localStorage.set('thekey', response.data.key)
           Vue.localStorage.set('token', response.data.token)
           Vue.localStorage.set('username', payload.username)
           const userdata = {
-            key: Vue.localStorage.get('key'),
+            key: Vue.localStorage.get('thekey'),
             token: Vue.localStorage.get('token'),
             username: Vue.localStorage.get('username')
           }
+          console.log(userdata)
           commit('setUser', userdata)
         }
       ).catch(
@@ -237,8 +268,7 @@ export const store = new Vuex.Store({
         }
       )
     },
-    userProfile({commit}){
-      
+    userProfile({commit}){ 
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           api.get('http://52.15.105.205/api/users/'+ this.state.user.username).then((response) => {
@@ -254,13 +284,28 @@ export const store = new Vuex.Store({
         }, 10)
       })
     },
+    contactsList({commit}){
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          api.get(urlusers.url + this.state.user.username+'/contacts').then((response) => {
+              resolve(response.data.contactsListResult)
+          }).catch(
+            (error) =>{
+              commit('setError', error)
+              reject(error)
+              console.log(error)
+            }
+          )
+        }, 10)
+      })
+    },
     logout ({commit}) {
-      Vue.localStorage.remove('key')
+      Vue.localStorage.remove('thekey')
       Vue.localStorage.remove('token')
       Vue.localStorage.remove('username')
 
       const userdata = {
-        key: Vue.localStorage.get('key'),
+        key: Vue.localStorage.get('thekey'),
         token: Vue.localStorage.get('token'),
         username: Vue.localStorage.get('username')
       }
