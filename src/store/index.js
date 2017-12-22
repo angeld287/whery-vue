@@ -256,7 +256,7 @@ export const store = new Vuex.Store({
 
     searcUser({commit}, payload){
       commit('setLoading', true)
-      api.get('http://52.15.105.205/api/users/'+ payload.username).then((response) => {
+      /* api.get('http://52.15.105.205/api/users/'+ payload.username).then((response) => {
           commit('setUserSearch', response.data) 
           console.log(this.state.userSearch)
           commit('setLoading', false)
@@ -266,7 +266,23 @@ export const store = new Vuex.Store({
           commit('setError', error)
           console.log(error)
         }
-      )
+      ) */
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          api.get('http://52.15.105.205/api/users/'+ payload.username).then((response) => {
+              commit('setUserSearch', response.data) 
+              resolve(response.data)
+          }).catch(
+            (error) =>{
+              commit('setError', error)
+              reject(error)
+              console.log(error)
+            }
+          )
+        }, 10)
+      })
+
     },
     userProfile({commit}){ 
       return new Promise((resolve, reject) => {
@@ -284,11 +300,41 @@ export const store = new Vuex.Store({
         }, 10)
       })
     },
+    addContac({commit},payload){
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          api.post(urlusers.url + this.state.user.username+'/contacts/', {key:payload.key}).then((response) => {
+              resolve(response)
+          }).catch(
+            (error) =>{
+              commit('setError', error)
+              reject(error)
+              console.log(error)
+            }
+          )
+        }, 10)
+      })
+    },
     contactsList({commit}){
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           api.get(urlusers.url + this.state.user.username+'/contacts').then((response) => {
               resolve(response.data.contactsListResult)
+          }).catch(
+            (error) =>{
+              commit('setError', error)
+              reject(error)
+              console.log(error)
+            }
+          )
+        }, 10)
+      })
+    },
+    removeContac({commit},payload){
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          api.delete(urlusers.url + this.state.user.username+'/contacts/'+payload.userName).then((response) => {
+              resolve(response)
           }).catch(
             (error) =>{
               commit('setError', error)

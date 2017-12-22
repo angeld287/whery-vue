@@ -4,13 +4,13 @@
       <v-container fluid grid-list-md class="grey lighten-4">
         <v-layout row wrap>
           <v-flex
-            v-bind="{ [`xs${card.flex}`]: true }"
+            v-bind="{ [`xs3`]: true }"
             v-for="card in cards"
             :key="card.title"
           >
             <v-card>
               <v-card-media
-                :src="card.src"
+                :src="card.image"
                 height="200px"
               >
                 <v-container fill-height fluid>
@@ -23,14 +23,9 @@
               </v-card-media>
               <v-card-actions class="white">
                 <v-spacer></v-spacer>
-                <v-btn icon>
-                  <v-icon>favorite</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon>bookmark</v-icon>
-                </v-btn>
-                <v-btn icon>
-                  <v-icon>share</v-icon>
+                <h6>{{card.firstName}}</h6>
+                <v-btn @click="deleteContact(`${card.userName}`)" icon>
+                  <icon name="times"></icon>
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -43,27 +38,23 @@
 
 <script>
   import Vue from 'vue'
-  import axios from 'axios'
-  import VueAxios from 'vue-axios'
-  
-  Vue.use(VueAxios, axios)
+  import 'vue-awesome/icons/flag'
+  import 'vue-awesome/icons' 
+  import Icon from 'vue-awesome/components/Icon'
+
+  Vue.component('icon', Icon)
   export default {
     data () {
       return {
         username: '',
         User: [],
-        cards: [
-            { title: 'Pre-fab homes', src: '/static/doc-images/cards/house.jpg', flex: 6 },
-            { title: 'Favorite road trips', src: '/static/doc-images/cards/road.jpg', flex: 6 },
-            { title: 'Best airlines', src: '/static/doc-images/cards/plane.jpg', flex: 6 },
-            { title: 'Best', src: '/static/doc-images/cards/plane.jpg', flex: 6 }
-        ]
+        cards: []
       }
     },
     mounted(){
         this.$store.dispatch("contactsList").then(response => {
-            //this.User = response
-            console.log(response)
+            this.cards = response
+            console.log(this.cards)
         }, error => {
             console.error("Got nothing")
         })
@@ -87,27 +78,17 @@
       }
     },
     methods: {
-      onSearch(){
-        const api = Vue.axios.create({
-            headers: {
-                'Content-Type': 'application/json',
-                'accept': 'application/json',
-                'Authorization': 'Bearer '+ Vue.localStorage.get('token')
-            }
-        })
-        api.get('http://52.15.105.205/api/users/jvolquez/contacts').then((response) => {
-            console.log(response)
-        }).catch(
-          (error) =>{
-            console.log(error)
-          }
-        )
-      },
       onAddContact(){
         console.log("asdas")
       },
       onDismissed(){
         this.$store.dispatch('clearError')
+      },
+      deleteContact(name){
+        this.$store.dispatch("removeContac", {userName:name}).then(response => {
+        }, error => {
+            console.error("Got nothing")
+        })
       }
     }
   }
