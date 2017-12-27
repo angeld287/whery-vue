@@ -198,14 +198,7 @@ export const store = new Vuex.Store({
       commit('clearError')
       console.log(Vue.localStorage.get('thekey'))
 
-      api.put(urlusers.url+Vue.localStorage.get('thekey'), {
-          //firstName: payload.firstName,
-          //lastName: payload.lastName,
-          //userName: payload.userName,
-          image: payload.image,
-          //email: payload.email,
-          //password: payload.password
-      }).then(
+      api.put(urlusers.url+Vue.localStorage.get('thekey'), payload).then(
         (response) =>{
           console.log(response.data)
         }

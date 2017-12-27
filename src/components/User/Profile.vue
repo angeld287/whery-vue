@@ -1,18 +1,18 @@
 <template>
   <v-layout class="mt-3" row justify-center>
-    <v-flex xs12 sm6>
+    <v-flex xs12 sm6 md3>
       <v-card>
         <v-card-media :src="User.image" height="300px">
           <v-layout column class="media">
             <v-card-title>
-              <v-btn dark icon>
+              <!-- <v-btn dark icon>
                 <v-icon>chevron_left</v-icon>
-              </v-btn>
+              </v-btn> -->
               <v-spacer></v-spacer>
-              <app-edit-profile></app-edit-profile>
-              <v-btn dark icon>
+              <app-edit-profile :user="user"></app-edit-profile>
+              <!-- <v-btn dark icon>
                 <v-icon>more_vert</v-icon>
-              </v-btn>
+              </v-btn> -->
             </v-card-title>
             <v-spacer></v-spacer>
           </v-layout>

@@ -26,7 +26,7 @@
         @click.stop="sideNav = !sideNav"
         class="hidden-sm-and-up "></v-toolbar-side-icon>
       <v-toolbar-title>
-        <router-link to="/" tag="span" style="cursor: pointer">DevMeetup</router-link>
+        <router-link to="/" tag="span" style="cursor: pointer">Wery</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
@@ -45,7 +45,6 @@
           @click="onLogout">
           <v-icon left dark>exit_to_app</v-icon>
           Logout
-
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -70,10 +69,10 @@
         ]
         if (this.userIsAuthenticated) {
           menuItems = [
-            {icon: 'supervisor_account', title: 'Contacts List', link: '/contactlist'},
-            {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'},
-            {icon: 'person', title: 'Profile', link: '/profile'},
-            {icon: 'person', title: 'Search Contacts', link: '/searchcontacts'}
+           /*  {icon: 'supervisor_account', title: 'Contacts List', link: '/contactlist'},
+            {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'}, */
+            {icon: 'person', title: 'Profile', link: '/profile'}/* ,
+            {icon: 'person', title: 'Search Contacts', link: '/searchcontacts'} */
           ]
         }
         return menuItems
