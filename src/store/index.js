@@ -170,17 +170,17 @@ export const store = new Vuex.Store({
           password: payload.password
       }).then(
         (response) =>{
-          console.log(response.data)
-          /* commit('setLoading', false)
-          Vue.localStorage.set('key', response.data.key)
+          //console.log(response.data)
+          commit('setLoading', false)
+          Vue.localStorage.set('thekey', response.data.key)
           Vue.localStorage.set('token', response.data.token)
-          Vue.localStorage.set('username', response.data.username)
+          Vue.localStorage.set('username', payload.userName)
           const userdata = {
-            key: Vue.localStorage.get('key'),
+            key: Vue.localStorage.get('thekey'),
             token: Vue.localStorage.get('token'),
             username: Vue.localStorage.get('username')
           }
-          commit('setUser', userdata) */
+          commit('setUser', userdata) 
         }
       ).catch(
         (error) =>{
@@ -222,8 +222,8 @@ export const store = new Vuex.Store({
       }).then(
         (response) =>{
           commit('setLoading', false)
-          console.log(response.data.key)
-          console.log(response.data.token)
+          //console.log(response.data.key)
+          //console.log(response.data.token)
           Vue.localStorage.set('thekey', response.data.key)
           Vue.localStorage.set('token', response.data.token)
           Vue.localStorage.set('username', payload.username)
@@ -232,7 +232,7 @@ export const store = new Vuex.Store({
             token: Vue.localStorage.get('token'),
             username: Vue.localStorage.get('username')
           }
-          console.log(userdata)
+          //console.log(userdata)
           commit('setUser', userdata)
         }
       ).catch(
@@ -249,18 +249,6 @@ export const store = new Vuex.Store({
 
     searcUser({commit}, payload){
       commit('setLoading', true)
-      /* api.get('http://52.15.105.205/api/users/'+ payload.username).then((response) => {
-          commit('setUserSearch', response.data) 
-          console.log(this.state.userSearch)
-          commit('setLoading', false)
-      }).catch(
-        (error) =>{
-          commit('setLoading', false)
-          commit('setError', error)
-          console.log(error)
-        }
-      ) */
-
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           api.get('http://52.15.105.205/api/users/'+ payload.username).then((response) => {
@@ -278,6 +266,7 @@ export const store = new Vuex.Store({
 
     },
     userProfile({commit}){ 
+      //console.log(this.state.user.username)
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           api.get('http://52.15.105.205/api/users/'+ this.state.user.username).then((response) => {

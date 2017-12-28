@@ -19,10 +19,12 @@
     "vue-axios": "^2.0.2",
     "vue-file-base64": "^1.0.2",
     "vue-localstorage": "^0.5.0",
+    "vue-password-strength-meter": "^1.1.1",
     "vue-router": "^2.3.1",
     "vue-search-select": "^2.4.0",
     "vuetify": "^0.14.0",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

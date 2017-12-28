@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import App from './App'
-import * as firebase from 'firebase'
+/* import * as firebase from 'firebase' */
 import router from './router'
 import { store } from './store'
 import DateFilter from './filters/date'
@@ -22,7 +22,7 @@ new Vue({
   store,
   render: h => h(App),
   created () {
-    firebase.initializeApp({
+    /* firebase.initializeApp({
       apiKey: 'AIzaSyCFYWd6FpR53u4hSPXQSjOYeZNPF1FxG2M',
       authDomain: 'yt-devmeetup.firebaseapp.com',
       databaseURL: 'https://yt-devmeetup.firebaseio.com',
@@ -34,6 +34,6 @@ new Vue({
         this.$store.dispatch('autoSignIn', user)
       }
     })
-    this.$store.dispatch('loadMeetups')
+    this.$store.dispatch('loadMeetups') */
   }
 })

@@ -32,12 +32,7 @@
                 <v-flex xs12>
                   <v-text-field label="User Name" :value="User.userName" required></v-text-field>
                 </v-flex>
-                <v-layout row><!-- 
-                  <VueImgInputer 
-                    v-model="picValue" 
-                    theme="light" 
-                    size="large">
-                  </VueImgInputer> -->
+                <v-layout row>
                   <file-base64
                     v-bind:multiple="true"
                     v-bind:done="getFiles">
@@ -64,13 +59,11 @@
 </template>
 <script>
   import fileBase64 from 'vue-file-base64'
-  import VueImgInputer from 'vue-img-inputer'
   
   export default {
     props: ['user'],
     components: { 
-      fileBase64,
-      VueImgInputer
+      fileBase64
       },
     data () {
       return {

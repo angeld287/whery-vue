@@ -42,14 +42,11 @@
                   </v-flex>
                 </v-layout>
                 <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field
-                      name="image"
-                      label="Image"
-                      id="image"
-                      v-model="image"
-                      required></v-text-field>
-                  </v-flex>
+                  <file-base64
+                    v-bind:multiple="true"
+                    v-bind:done="getFiles"
+                    required>
+                  </file-base64>
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
@@ -106,9 +103,13 @@
 
 <script>
   import Password from 'vue-password-strength-meter'
+  import fileBase64 from 'vue-file-base64'
 
   export default {
-    components: { Password },
+    components: { 
+      Password, 
+      fileBase64 
+    },
     data () {
       return {
         firstName: '',
@@ -140,11 +141,19 @@
     watch: {
       token (value) {
         if (value !== null && value !== undefined) {
-          this.$router.push('/')
+          this.$router.push('/signin')
         }
       }
     },
     methods: {
+      getFiles(files){
+        //console.log(files[0].base64)
+        this.image = files[0].base64
+        //console.log('dads'+ this.user.name)
+        /* this.$store.dispatch('updateUser', {
+          image: files[0].base64
+        }) */
+      },
       onSignup () {
         this.$store.dispatch('signUserUp', 
         {
