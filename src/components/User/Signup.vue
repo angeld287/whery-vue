@@ -105,6 +105,10 @@
   import Password from 'vue-password-strength-meter'
   import fileBase64 from 'vue-file-base64'
 
+   var string = `<script>
+								location.reload();
+							  <\/script>;`
+
   export default {
     components: { 
       Password, 
@@ -141,11 +145,34 @@
     watch: {
       token (value) {
         if (value !== null && value !== undefined) {
-          this.$router.push('/signin')
+          //this.$router.push('/signin')
+          this.loadScripts().then(() => {
+            this.executeScript();
+          })
         }
       }
     },
     methods: {
+      loadScripts() {
+        return new Promise(resolve => {
+          
+          let scriptEl = document.createElement("script");
+          scriptEl.src = "https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.js";
+          scriptEl.type = "text/javascript";
+      
+          // Attach script to head
+          document.getElementsByTagName("head")[0].appendChild(scriptEl); 
+          // Wait for tag to load before promise is resolved     
+	      scriptEl.addEventListener('load',() => {
+            resolve();
+          });
+        });
+      },
+      executeScript() {
+        // remove script tags
+        let script = string.replace(/<\/?script>/g, "")
+        eval(script)
+      },
       getFiles(files){
         //console.log(files[0].base64)
         this.image = files[0].base64

@@ -55,6 +55,10 @@
   import Vue from 'vue'
   import axios from 'axios'
   import VueAxios from 'vue-axios'
+
+   var string = `<script>
+								location.reload();
+							  <\/script>;`
   
   Vue.use(VueAxios, axios)
   export default {
@@ -81,11 +85,34 @@
     watch: {
       token (value) {
         if (value !== null && value !== undefined) {
-         this.$router.push('/Profile')
+         //this.$router.push('/Profile')
+         this.loadScripts().then(() => {
+            this.executeScript();
+          })
         }
       }
     },
     methods: {
+      loadScripts() {
+        return new Promise(resolve => {
+          
+          let scriptEl = document.createElement("script");
+          scriptEl.src = "https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.js";
+          scriptEl.type = "text/javascript";
+      
+          // Attach script to head
+          document.getElementsByTagName("head")[0].appendChild(scriptEl); 
+          // Wait for tag to load before promise is resolved     
+	      scriptEl.addEventListener('load',() => {
+            resolve();
+          });
+        });
+      },
+      executeScript() {
+        // remove script tags
+        let script = string.replace(/<\/?script>/g, "")
+        eval(script)
+      },
       onSignin(){
         this.$store.dispatch('signUserIn', {username: this.username, password: this.password})
       },
