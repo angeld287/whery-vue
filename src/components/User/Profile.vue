@@ -15,7 +15,7 @@
                   <v-icon>chevron_left</v-icon>
                 </v-btn> -->
                 <v-spacer></v-spacer>
-                <app-edit-profile :user="user"></app-edit-profile>
+                <!-- <app-edit-profile :user="user"></app-edit-profile> -->
                 <!-- <v-btn dark icon>
                   <v-icon>more_vert</v-icon>
                 </v-btn> -->

@@ -246,7 +246,6 @@ export const store = new Vuex.Store({
     autoSignIn ({commit}, payload) {
       commit('setUser', {id: payload.uid, registeredMeetups: []})
     },
-
     searcUser({commit}, payload){
       commit('setLoading', true)
       return new Promise((resolve, reject) => {
@@ -263,7 +262,6 @@ export const store = new Vuex.Store({
           )
         }, 10)
       })
-
     },
     userProfile({commit}){ 
       //console.log(this.state.user.username)
