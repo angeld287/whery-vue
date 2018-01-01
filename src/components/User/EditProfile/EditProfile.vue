@@ -12,32 +12,39 @@
         </v-btn>
         <v-card>
           <v-card-title>
-            <span class="headline">{{User.name}}</span>
+            <span class="headline">{{usuario.name}}</span>
           </v-card-title>
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="firstname" label="first name" :value="User.name" required></v-text-field>
+                  <v-text-field v-model="firstname" label="first name" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field label="last name" hint="example of persistent helper text"
+                  <v-text-field v-model="lastname" label="last name" hint="example of persistent helper text"
                     persistent-hint
                     required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Email" :value="User.email" required></v-text-field>
+                  <v-text-field v-model="email" label="Email" required></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="User Name" :value="User.userName" required></v-text-field>
+                  <v-text-field v-model="username" label="User Name" required></v-text-field>
                 </v-flex>
-                <v-layout row>
+                <v-flex xs5>
+                    <v-card-media
+                      :src="image"
+                      height="125px"
+                      contain
+                    ></v-card-media>
+                </v-flex>
+                <v-flex>
                   <file-base64
                     v-bind:multiple="true"
                     v-bind:done="getFiles">
                   </file-base64>
-                </v-layout>
+                </v-flex>
               </v-layout>
             </v-container>
             <small>*indicates required field</small>
@@ -68,18 +75,18 @@
     data () {
       return {
         dialog: false,
-        User: [],
+        usuario: [],
         firstname: this.user.name,
-        lastname: '',
-        username: '',
-        image: '',
-        email: ''
+        lastname: this.user.name,
+        username: this.user.userName,
+        image: this.user.image,
+        email: this.user.email
       }
     },
     mounted(){
         this.$store.dispatch("userProfile").then(response => {
-            this.User = response
-            console.log(this.User)
+            this.usuario = response
+            console.log(this.usuario)
         }, error => {
             console.error("Got nothing")
         })
@@ -103,9 +110,9 @@
       },
       updateUser(){
         this.$store.dispatch('updateUser', {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          userName: this.userName,
+          firstname: this.firstname,
+          lastname: this.lastname,
+          username: this.username,
           image: this.image,
           email: this.email
         })

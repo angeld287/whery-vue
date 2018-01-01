@@ -221,7 +221,6 @@ export const store = new Vuex.Store({
           password: payload.password
       }).then(
         (response) =>{
-          commit('setLoading', false)
           //console.log(response.data.key)
           //console.log(response.data.token)
           Vue.localStorage.set('thekey', response.data.key)
@@ -234,6 +233,7 @@ export const store = new Vuex.Store({
           }
           //console.log(userdata)
           commit('setUser', userdata)
+          commit('setLoading', false)
         }
       ).catch(
         (error) =>{
